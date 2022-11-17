@@ -47,12 +47,27 @@ const Balance = () => {
         .map((entry) => Number(entry.amount))
         .reduce((acc, cur) => acc + cur, 0);
 
-      const total = Number(entries) - Number(outputs);
+      const total = Number(entries) - Number(outputs);4
+
+      const profit = db_stock_entries
+        .filter((item) => item.product_id === prod.id)
+        .map((entry) => Number(entry.price * entry.amount))
+        .reduce((acc, cur) => acc + cur, 0)
+
+      const outlay = db_stock_outputs
+        .filter((item) => item.product_id === prod.id)
+        .map((entry) => Number(entry.price * entry.amount))
+        .reduce((acc, cur) => acc + cur, 0)
+
+      // const balance = Number(outlay) - Number(profit);4
+      const balance = Number(outlay)
+
 
       newArray.push({
         product_id: prod.id,
         product_name: prod.name,
         amount: total,
+        balance
       });
 
       setListProducts(newArray);
@@ -114,6 +129,9 @@ const Balance = () => {
                   <Th fontWeight="bold" fontSize="14px">
                     Qtd.
                   </Th>
+                  <Th fontWeight="bold" fontSize="14px">
+                    Saldo
+                  </Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -121,6 +139,7 @@ const Balance = () => {
                   <Tr key={i}>
                     <Td color="gray.500">{item.product_name}</Td>
                     <Td color="gray.500">{item.amount}</Td>
+                    <Td color="gray.500">R$ {item.balance}</Td>
                   </Tr>
                 ))}
               </Tbody>

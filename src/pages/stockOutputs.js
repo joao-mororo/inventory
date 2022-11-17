@@ -46,17 +46,17 @@ const StockOutputs = () => {
     if (listStockOutputs && listStockOutputs.length) {
       localStorage.setItem(
         "db_stock_outputs",
-        JSON.stringify([...listStockOutputs, { id, amount, product_id }])
+        JSON.stringify([...listStockOutputs, { id, amount, product_id, price: getPrice(product_id), amountedPrice: getPrice(product_id) * amount }])
       );
 
-      setStockOutputs([...listStockOutputs, { id, amount, product_id }]);
+      setStockOutputs([...listStockOutputs, { id, amount, product_id, price: getPrice(product_id), amountedPrice: getPrice(product_id) * amount }]);
     } else {
       localStorage.setItem(
         "db_stock_outputs",
-        JSON.stringify([{ id, amount, product_id }])
+        JSON.stringify([{ id, amount, product_id, price: getPrice(product_id), amountedPrice: getPrice(product_id) * amount }])
       );
 
-      setStockOutputs([{ id, amount, product_id }]);
+      setStockOutputs([{ id, amount, product_id, price: getPrice(product_id), amountedPrice: getPrice(product_id) * amount }]);
     }
 
     setAmount("");
@@ -74,6 +74,10 @@ const StockOutputs = () => {
   const getProductById = (id) => {
     return listProducts.filter((item) => item.id === id)[0]?.name;
   };
+
+  const getPrice = (id) => {
+    return listProducts.filter((item) => item.id === id)[0]?.price; 
+  }
 
   return (
     <Flex h="100vh" flexDirection="column">
@@ -118,6 +122,9 @@ const StockOutputs = () => {
                   <Th fontWeight="bold" fontSize="14px">
                     Qtd.
                   </Th>
+                  <Th fontWeight="bold" fontSize="14px">
+                    Lucro
+                  </Th>
                   <Th></Th>
                 </Tr>
               </Thead>
@@ -126,6 +133,8 @@ const StockOutputs = () => {
                   <Tr key={i}>
                     <Td color="gray.500">{getProductById(item.product_id)}</Td>
                     <Td color="gray.500">{item.amount}</Td>
+                    {/* <Td color="gray.500">R$ {getPrice(item.product_id) * item.amount}</Td> */}
+                    <Td color="gray.500">R$ {item.amountedPrice}</Td>
                     <Td textAlign="end">
                       <Button
                         p="2"

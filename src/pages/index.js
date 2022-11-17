@@ -19,6 +19,7 @@ import Sidebar from "../components/Sidebar";
 
 const Produtos = () => {
   const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
   const [listProducts, setListProducts] = useState([]);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const Produtos = () => {
 
   const handleNewProduct = () => {
     if (!name) return;
+    if (!price) return;
     if (verifyProductName()) {
       alert("Produto já cadastrado!");
       return;
@@ -41,17 +43,18 @@ const Produtos = () => {
     if (listProducts && listProducts.length) {
       localStorage.setItem(
         "db_products",
-        JSON.stringify([...listProducts, { id, name }])
+        JSON.stringify([...listProducts, { id, name, price }])
       );
 
-      setListProducts([...listProducts, { id, name }]);
+      setListProducts([...listProducts, { id, name, price }]);
     } else {
-      localStorage.setItem("db_products", JSON.stringify([{ id, name }]));
+      localStorage.setItem("db_products", JSON.stringify([{ id, name, price }]));
 
-      setListProducts([{ id, name }]);
+      setListProducts([{ id, name, price }]);
     }
 
     setName("");
+    setPrice("");
   };
 
   const verifyProductName = () => {
@@ -100,6 +103,12 @@ const Produtos = () => {
               onChange={(e) => setName(e.target.value)}
               placeholder="Nome do produto"
             />
+            <Input
+              value={price}
+              onChange={(e) => setPrice(e.target.value.replace(',', '.'))}
+              placeholder="Preço do produto"
+              type="number"
+            />
             <Button w="40" onClick={handleNewProduct}>
               CADASTRAR
             </Button>
@@ -112,6 +121,9 @@ const Produtos = () => {
                   <Th fontWeight="bold" fontSize="14px">
                     Nome
                   </Th>
+                  <Th fontWeight="bold" fontSize="14px">
+                    Preço
+                  </Th>
                   <Th></Th>
                 </Tr>
               </Thead>
@@ -119,6 +131,7 @@ const Produtos = () => {
                 {listProducts.map((item, i) => (
                   <Tr key={i}>
                     <Td color="gray.500">{item.name}</Td>
+                    <Td color="gray.500">R$ {item.price}</Td>
                     <Td textAlign="end">
                       <Button
                         p="2"
