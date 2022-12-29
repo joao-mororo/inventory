@@ -8,26 +8,27 @@ import {
   useBreakpointValue,
   Button,
 } from "@chakra-ui/react";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
+import { useToggle, useLocalStorage } from "./Hooks";
 import { useSidebarContext } from "../contexts/SidebarContext";
 import { FiMenu } from "react-icons/fi";
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs'
 
-const useToggle = (initialState = false) => {
-  // Initialize the state
-  const [state, setState] = useState(initialState);
+// const useToggle = (initialState = false) => {
+//   // Initialize the state
+//   const [state, setState] = useState(initialState);
   
-  // Define and memorize toggler function in case we pass down the component,
-  // This function change the boolean value to it's opposite value
-  const toggle = useCallback(() => setState(state => !state), []);
+//   // Define and memorize toggler function in case we pass down the component,
+//   // This function change the boolean value to it's opposite value
+//   const toggle = useCallback(() => setState(state => !state), []);
   
-  return [state, toggle]
-}
+//   return [state, toggle]
+// }
 
 const Header = () => {
   const [balance, setBalance] = useState(0)
-  const [showBalance, setShowBalance] = useToggle()
-
+  const [showBalance, setShowBalance] = useLocalStorage('showBalance', false)
+  const [hiddenBalance, setHiddenBalance] = useState('')
 
 
   const isMobile = useBreakpointValue({
@@ -48,10 +49,20 @@ const Header = () => {
     setBalance(totalBalance)
   })
 
-  const hiddenBalance = ''
-  for (let i = 0; i < balance.toString().length; i++) {
-    hiddenBalance += '*'
-  }
+  useEffect(() => {
+    let string = ''
+    for (let i = 0; i < balance.toString().length; i++) {
+      string += '*'
+    }
+
+    setHiddenBalance(string)
+  })
+
+  // function changeShowBalance() {
+  //   setShowBalance(!showBalance)
+  //   return !showBalance
+  // }
+  
 
   const { onOpen } = useSidebarContext();
 
@@ -81,8 +92,9 @@ const Header = () => {
       <Text>Controle de estoque</Text>
       <Flex ml="auto">
         <HStack>
-          <Text>Saldo: R${showBalance ? balance : hiddenBalance}</Text>
-          <button onClick={setShowBalance}>{showBalance ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}</button>
+          <Text>Lucro: R${balance}</Text>
+          {/* <Text>Lucro: R${showBalance ? balance : hiddenBalance}</Text> */}
+          {/* <button onClick={changeShowBalance}>{showBalance ? <BsFillEyeFill /> : <BsFillEyeSlashFill />}</button> */}
         </HStack>
       </Flex>
     </Flex>
