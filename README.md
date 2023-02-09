@@ -5,7 +5,7 @@ A simple inventory control system.
 - HTML
 - CSS
 - JavaScript
-- Vue.JS
+- Next.JS
 
 # Some used libraries
 - Chakra UI

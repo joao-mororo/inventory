@@ -108,7 +108,7 @@ const StockOutputs = () => {
               onChange={(e) => setAmount(e.target.value)}
             />
             <Button w="40" onClick={handleNewOutput}>
-              SALVAR
+              VENDER
             </Button>
           </SimpleGrid>
 
